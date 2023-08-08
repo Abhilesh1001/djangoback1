@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import NewContact,Product,Order,OrderUpdate
+from .models import NewContact,Product,Order,OrderUpdate,CartUserData
 
 
 class ContactSerilizer(serializers.ModelSerializer):
@@ -44,3 +44,14 @@ class OrderJsonSerilizer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ['items_json']
+
+
+class CartDataSerilizer(serializers.ModelSerializer):
+    class Meta:
+        model= CartUserData
+        fields = ['item_json']
+
+class CartCreateSerilizer(serializers.ModelSerializer):
+    class Meta:
+        model= CartUserData
+        fields = '__all__'

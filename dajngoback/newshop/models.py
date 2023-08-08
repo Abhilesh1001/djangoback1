@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.timezone import now 
+from customauth.models import User
 
 # Create your models here.
 
@@ -30,6 +31,7 @@ class Product(models.Model):
 class Order(models.Model):
     order_id=models.AutoField(primary_key=True)
     items_json = models.CharField(max_length=5000,default='')
+    user = models.ForeignKey(User,on_delete=models.CASCADE,default='')
     amount = models.IntegerField(default=0)
     name = models.CharField(max_length=50,default='')
     email = models.EmailField(max_length=50,default='')
@@ -46,3 +48,12 @@ class OrderUpdate(models.Model):
     order_id = models.IntegerField()
     update_desc = models.CharField(max_length=5000)
     timestamp = models.DateField(auto_now_add = True)
+
+
+class CartUserData(models.Model):
+    cart_id = models.AutoField(primary_key=True)
+    item_json = models.CharField(max_length=5000)
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
+
+
+

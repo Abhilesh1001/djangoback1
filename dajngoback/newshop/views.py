@@ -3,11 +3,10 @@ from rest_framework.views import APIView
 from customauth.renderers import UserRenderer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .serilizer import ContactSerilizer,ProductSerilizer,SingleProductSerilizer,CategoryWiseSerializer,OrderSerilizer,OrderUpdateSerilizer,OrderJsonSerilizer
-from .models import NewContact,Product,OrderUpdate,Order
+from .serilizer import ContactSerilizer,ProductSerilizer,SingleProductSerilizer,CategoryWiseSerializer,OrderSerilizer,OrderUpdateSerilizer,OrderJsonSerilizer,CartDataSerilizer,CartCreateSerilizer
+from .models import NewContact,Product,OrderUpdate,Order,CartUserData
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
-
 
 
 # Create your views here.
@@ -87,7 +86,7 @@ class OrderUpdateView(APIView):
             dataSerilize = []
             if len(order) > 0:
                 update = OrderUpdate.objects.filter(order_id=order_id)
-                print(order)
+                print(order)    
                 serilizerData = OrderJsonSerilizer(order,many=True)
                 serilizer = OrderUpdateSerilizer(update,many=True)
                 data_serialize = {
@@ -101,8 +100,48 @@ class OrderUpdateView(APIView):
     
 
 
+class CartUpdateView(APIView):
+    renderer_classes = [UserRenderer]
+    permission_classes = [IsAuthenticated]
+
+    def put(self,request,email):
+        try:
+            instance = CartUserData.objects.get(user__email=email)
+            serilizer = CartDataSerilizer(instance,data=request.data)
+        except CartUserData.DoesNotExist:
+            serilizer = CartDataSerilizer(data=request.data)
+        if serilizer.is_valid():
+            serilizer.save()
+            return Response({'msg':'data Updated Successfully'})
+        
+        return Response(serilizer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 
+class CartCreateView(APIView):
+    renderer_classes = [UserRenderer]
+    permission_classes = [IsAuthenticated]
+    def post(self,request,format=None):
+        serilizer = CartCreateSerilizer(data=request.data)
+        if serilizer.is_valid():
+            serilizer.save()
+            return Response({'msg':'data Created Successfully'})
+        
+        return Response(serilizer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class GetCartView(APIView):
+    renderer_classes =[UserRenderer]    
+    # permission_classes = [IsAuthenticated]
+    def get(self,request,email,format=None):
+        try:
+            pro = CartUserData.objects.get(user__email=email)
+            serilizer = CartCreateSerilizer(pro)  
+            return Response(serilizer.data)
+        except Exception as e:
+            return Response({'error':'error'})
+        
+ 
         
         
 

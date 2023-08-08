@@ -10,5 +10,8 @@ urlpatterns = [
     path('categorywiseview/',views.CategoryWiseView.as_view()),
     path('order/',views.NewOrder.as_view()),
     path('OrderUpdate/',views.OrderUpdateView.as_view()),
+    path('cartData/<str:email>',views.CartUpdateView.as_view()),
+    path('cartCreate/',views.CartCreateView.as_view()),
+    path('cartGet/<str:email>',views.GetCartView.as_view()),
 ]
     
