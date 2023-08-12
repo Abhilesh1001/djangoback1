@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.timezone import now 
 from customauth.models import User
 
+
 # Create your models here.
 
 class Contact(models.Model):
@@ -57,3 +58,5 @@ class CartUserData(models.Model):
 
 
 
+class ExcelFile(models.Model):
+    file = models.FileField(upload_to="excel")

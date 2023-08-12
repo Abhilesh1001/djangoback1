@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Excel File</title>
+</head>
+<body>
+    <h1>Generate Excel File</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="filename">Enter Filename:</label>
+        <input type="text" id="filename" name="filename" value="output.xlsx">
+        <button type="submit">Generate Excel</button>
+    </form>
+</body>
+</html>

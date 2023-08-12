@@ -13,5 +13,10 @@ urlpatterns = [
     path('cartData/<str:email>',views.CartUpdateView.as_view()),
     path('cartCreate/',views.CartCreateView.as_view()),
     path('cartGet/<str:email>',views.GetCartView.as_view()),
+    path('excel/',views.export_data_to_excel),
+    path('excelimport/',views.import_data_to_db),
+    path('contactpdf/',views.contact_pdf.as_view()),
+    path('browserexcel/',views.export_to_excel_on_download),
+    path('downloadexcelfolder/',views.import_exce_in_folder),
 ]
     
