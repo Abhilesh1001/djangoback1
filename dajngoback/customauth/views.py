@@ -2,7 +2,7 @@ from django.shortcuts import render,HttpResponse
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from .serilizers import UserRegestrationSerilizer,UserLoginSerilizer,UserProfileSerilizer
+from .serilizers import UserRegestrationSerilizer,UserLoginSerilizer,UserProfileSerilizer,ChangePasswordSerilizer,SendPasswordResetEmailSerilizer,UserPasswordResetPasswordreset
 from django.contrib.auth import login,authenticate
 from .renderers import UserRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -63,8 +63,56 @@ class ProfileView(APIView):
     
 
 
+class UserChangePasswordView(APIView):
+    renderer_classes = [UserRenderer]
+    permission_classes = [IsAuthenticated]
+    def post(self,request,format=None):
+        serilizer = ChangePasswordSerilizer(data=request.data,context = {'user':request.user})
+        if serilizer.is_valid(raise_exception=True):
+            return Response({'msg':'password changed successufully'},status=status.HTTP_200_OK)
+
+        return Response(serilizer.errors,status=status.HTTP_400_BAD_REQUEST)
+        
+    
+class SendPasswordEmailView(APIView):
+    renderer_classes=[UserRenderer]
+    def post(self,request,format=None):
+        serilizer = SendPasswordResetEmailSerilizer(data=request.data)
+        if serilizer.is_valid(raise_exception=True):
+            return Response({'msg':'password Reset link senf Please check your Email'},status=status.HTTP_200_OK)
+        
+        return Response(serilizer.errors,status=status.HTTP_400)
+
+
+
+class UserPassewordResetView(APIView):
+    renderer_classes = [UserRenderer]
+    def post(self,request,uid,token,format=None):
+        print('uidhome',uid)
+        serilizers = UserPasswordResetPasswordreset(data=request.data,context ={'uid':uid,'token':token})
+        if serilizers.is_valid(raise_exception=True):
+            return Response({'msg':'Pasword Reset Sucefully'},status=status.HTTP_200_OK)
+        return Response(serilizers.errors,status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         
+
+
+
+
+
+
 
 
