@@ -231,11 +231,6 @@ def import_exce_in_folder(request):
     return render(request, 'your_template.html')
 
 
-
-
-
-
-
         
 def import_data_to_db(request):
     if request.method == 'POST':
