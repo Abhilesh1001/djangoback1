@@ -47,7 +47,7 @@ class ChangePasswordSerilizer(serializers.Serializer):
         password2 = attrs.get('password2')
         user = self.context.get('user')
         if password !=password2:
-            raise serializers.ValidationError('password and confirm password doesnot matched')
+            raise serializers.ValidationError('Password and confirm password doesnot matched')
 
         user.set_password(password)
         user.save()
@@ -66,7 +66,7 @@ class SendPasswordResetEmailSerilizer(serializers.Serializer):
             user = User.objects.get(email=email)
             uid = urlsafe_base64_encode(force_bytes(user.id))
             token =PasswordResetTokenGenerator().make_token(user)
-            link = 'http://127.0.0.1:5173/api/user/reset/'+uid+'/'+token
+            link = 'http://localhost:5173/auth/resetpassworduidtoken/'+uid+'/'+token
             print('password Reset link',link)
             return attrs
         else:
