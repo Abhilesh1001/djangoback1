@@ -55,3 +55,8 @@ class CartCreateSerilizer(serializers.ModelSerializer):
     class Meta:
         model= CartUserData
         fields = '__all__'
+
+
+# set session 
+class SessionSerializer(serializers.Serializer):
+    name = serializers.CharField()

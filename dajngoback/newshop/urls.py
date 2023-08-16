@@ -18,5 +18,10 @@ urlpatterns = [
     path('contactpdf/',views.contact_pdf.as_view()),
     path('browserexcel/',views.export_to_excel_on_download),
     path('downloadexcelfolder/',views.import_exce_in_folder),
+    path('setcoockies/',views.SetCookieView.as_view()),
+    path('getcoockies/',views.GetCookieView.as_view()),
+    path('deletecoockies/',views.DeleteCookieView.as_view()),
+    path('setsession/',views.SetSessionView.as_view()),
+    path('getsession/',views.GetSessionView.as_view()),
 ]
     

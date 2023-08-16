@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from customauth.renderers import UserRenderer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .serilizer import ContactSerilizer,ProductSerilizer,SingleProductSerilizer,CategoryWiseSerializer,OrderSerilizer,OrderUpdateSerilizer,OrderJsonSerilizer,CartDataSerilizer,CartCreateSerilizer
+from .serilizer import ContactSerilizer,ProductSerilizer,SingleProductSerilizer,CategoryWiseSerializer,OrderSerilizer,OrderUpdateSerilizer,OrderJsonSerilizer,CartDataSerilizer,CartCreateSerilizer,SessionSerializer
 from .models import NewContact,Product,OrderUpdate,Order,CartUserData,ExcelFile
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -15,6 +15,7 @@ from .helpers import save_pdf
 from django.http import FileResponse
 from io import BytesIO
 import openpyxl
+from datetime import datetime,timedelta
 # Create your views here.
 
 class NewContactView(APIView):
@@ -231,11 +232,6 @@ def import_exce_in_folder(request):
     return render(request, 'your_template.html')
 
 
-
-
-
-
-
         
 def import_data_to_db(request):
     if request.method == 'POST':
@@ -271,6 +267,100 @@ class contact_pdf(APIView):
 
 
 
+# setcookies 
+
+# def set_coockies(request):
+#     response = render(request,'student/setcookie.html')
+#     response.set_cookie('name','Abhilesh')
+#     return response
 
 
+
+# def get_coockies(request):
+#     print(request)
+#     name = request.COOKIES['name']        
+#     return render(request,'studetn/getcookies.html',{'name':name})
+
+# delete function 
+
+# def deleteCookies(request):
+#     response = render(request,'student/delcookies.html')
+#     response.delete_cookie('name')
+#     return response 
+
+
+
+# set cookies 
+class SetCookieView(APIView):
+    def get(self, request, *args, **kwargs):
+        response = Response("Cookie set successfully")
+        # response.set_cookie('name', 'Abhilesh')
+        # setting date time with expire date 
+        response.set_cookie('name', 'Abhilesh',expires=datetime.utcnow()+timedelta(days=2))
+        return response
+    
+# get cookies 
+
+class GetCookieView(APIView):
+    def get(self, request, *args, **kwargs):
+        cookie_name = 'name'
+        cookie_value = request.COOKIES.get(cookie_name, 'Cookie not found')
         
+        return Response({'cookie_value': cookie_value})
+    
+
+# deleter cookies  
+
+class DeleteCookieView(APIView):
+    def get(self, request, *args, **kwargs):
+        response = Response("Cookie deleted successfully")
+        cookie_name = 'name'
+        response.delete_cookie(cookie_name)  # Delete the cookie by setting its expiration time to a past date
+        return response
+    
+# save data at server site 
+# session storage django 
+
+# set session 
+# def setsession(request):
+#     request.session['name']= 'Abhilesh'
+#     return render(request,'student/setsession.html')
+
+# get session 
+# def getsession(request):
+#     name = request.session['name']
+#     return render(request,'student/getsession.html',{'name',name})
+    
+# set session 
+class SetSessionView(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = SessionSerializer(data=request.data)
+        if serializer.is_valid():
+            request.session['name'] = serializer.validated_data['name']
+            return Response({'message': 'Session data set successfully'})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# get session 
+class GetSessionView(APIView):
+    def get(self, request, *args, **kwargs):
+        session_data = {'name': request.session.get('name')}
+        serializer = SessionSerializer(data=session_data)
+        if serializer.is_valid():
+            return Response(serializer.validated_data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
