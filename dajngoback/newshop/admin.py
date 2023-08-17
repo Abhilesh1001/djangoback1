@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import NewContact,Product,Order,OrderUpdate,CartUserData
+from django.contrib.sessions.models import Session
 
 # Register your models here.
 
@@ -23,3 +24,7 @@ class AdminOrderUpdate(admin.ModelAdmin):
 class AdminCartUserData(admin.ModelAdmin):
     list_display= ['cart_id','item_json','user']
 
+
+@admin.register(Session)
+class AdminSession(admin.ModelAdmin):
+    list_display : ['session_key','session_data','session_date']

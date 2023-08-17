@@ -384,6 +384,7 @@ class SetTokensession(APIView):
 class getTokensession(APIView):
     def get(self,request,*args,**kwargs):
         session_data = {'token' : request.session.get('token')}
+        print(session_data)
         serilizer = setSessionTokenSerilizer(data=session_data)
         if serilizer.is_valid():
             return Response(serilizer.validated_data)
