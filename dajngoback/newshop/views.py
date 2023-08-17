@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from customauth.renderers import UserRenderer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .serilizer import ContactSerilizer,ProductSerilizer,SingleProductSerilizer,CategoryWiseSerializer,OrderSerilizer,OrderUpdateSerilizer,OrderJsonSerilizer,CartDataSerilizer,CartCreateSerilizer,SessionSerializer
+from .serilizer import ContactSerilizer,ProductSerilizer,SingleProductSerilizer,CategoryWiseSerializer,OrderSerilizer,OrderUpdateSerilizer,OrderJsonSerilizer,CartDataSerilizer,CartCreateSerilizer,SessionSerializer,setSessionTokenSerilizer
 from .models import NewContact,Product,OrderUpdate,Order,CartUserData,ExcelFile
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -289,7 +289,6 @@ class contact_pdf(APIView):
 #     return response 
 
 
-
 # set cookies 
 class SetCookieView(APIView):
     def get(self, request, *args, **kwargs):
@@ -300,7 +299,6 @@ class SetCookieView(APIView):
         return response
     
 # get cookies 
-
 class GetCookieView(APIView):
     def get(self, request, *args, **kwargs):
         cookie_name = 'name'
@@ -310,7 +308,6 @@ class GetCookieView(APIView):
     
 
 # deleter cookies  
-
 class DeleteCookieView(APIView):
     def get(self, request, *args, **kwargs):
         response = Response("Cookie deleted successfully")
@@ -330,7 +327,16 @@ class DeleteCookieView(APIView):
 # def getsession(request):
 #     name = request.session['name']
 #     return render(request,'student/getsession.html',{'name',name})
-    
+
+# delete session 
+
+# def deletesession(request):
+#     if 'name' in request.session:
+#         del request.session['name']
+
+#     return render(request,'student/delsessn.html') 
+
+
 # set session 
 class SetSessionView(APIView):
     def post(self, request, *args, **kwargs):
@@ -349,16 +355,48 @@ class GetSessionView(APIView):
         if serializer.is_valid():
             return Response(serializer.validated_data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+# delete session 
+
+class DeleteSessionView(APIView):
+    def post(self, request, *args, **kwargs):
+        if 'name' in request.session:
+            del request.session['name']
+            return Response({'message': 'Session data deleted successfully'})
+        return Response({'message': 'Session data not found'}, status=status.HTTP_404_NOT_FOUND)
 
 
 
+# set token session 
+
+class SetTokensession(APIView):
+    def post(self,request,*args,**kwargs):
+        serilizer = setSessionTokenSerilizer(data=request.data)
+        if serilizer.is_valid():
+            request.session['token'] = serilizer.validated_data['token']
+            return Response({'message': 'Session data set successfully'})
+        return Response(serilizer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# get token session 
 
+class getTokensession(APIView):
+    def get(self,request,*args,**kwargs):
+        session_data = {'token' : request.session.get('token')}
+        serilizer = setSessionTokenSerilizer(data=session_data)
+        if serilizer.is_valid():
+            return Response(serilizer.validated_data)
+        return Response(serilizer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# delete token session 
 
-
-
+class deleteTokenSession(APIView):
+    def post(self,request,*args,**kwargs):
+        if 'token' in request.session:
+            del request.session['token']
+            return Response({'message': 'Session data deleted successfully'})
+        return Response({'message': 'Session data not found'}, status=status.HTTP_404_NOT_FOUND)
 
 
 

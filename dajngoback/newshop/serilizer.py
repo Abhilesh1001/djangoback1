@@ -60,3 +60,8 @@ class CartCreateSerilizer(serializers.ModelSerializer):
 # set session 
 class SessionSerializer(serializers.Serializer):
     name = serializers.CharField()
+
+
+# settokensession 
+class setSessionTokenSerilizer(serializers.Serializer):
+    token = serializers.CharField()

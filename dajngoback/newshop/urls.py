@@ -23,5 +23,9 @@ urlpatterns = [
     path('deletecoockies/',views.DeleteCookieView.as_view()),
     path('setsession/',views.SetSessionView.as_view()),
     path('getsession/',views.GetSessionView.as_view()),
+    path('delsession/',views.DeleteSessionView.as_view()),
+    path('settokensession/',views.SetTokensession.as_view()),
+    path('gettokensession/',views.getTokensession.as_view()),
+    path('deltokensession/',views.deleteTokenSession.as_view()),
 ]
     
