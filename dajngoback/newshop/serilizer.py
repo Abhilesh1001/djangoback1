@@ -65,3 +65,9 @@ class SessionSerializer(serializers.Serializer):
 # settokensession 
 class setSessionTokenSerilizer(serializers.Serializer):
     token = serializers.CharField()
+
+
+class OrderDetalisSerilizer(serializers.ModelSerializer):
+    class Meta:
+        model= Order
+        fields = ['order_id','email']

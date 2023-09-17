@@ -27,5 +27,6 @@ urlpatterns = [
     path('settokensession/',views.SetTokensession.as_view()),
     path('gettokensession/',views.getTokensession.as_view()),
     path('deltokensession/',views.deleteTokenSession.as_view()),
+    path('orderDetail/',views.OrderDetails.as_view()),
 ]
     

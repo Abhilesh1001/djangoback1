@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from customauth.renderers import UserRenderer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .serilizer import ContactSerilizer,ProductSerilizer,SingleProductSerilizer,CategoryWiseSerializer,OrderSerilizer,OrderUpdateSerilizer,OrderJsonSerilizer,CartDataSerilizer,CartCreateSerilizer,SessionSerializer,setSessionTokenSerilizer
+from .serilizer import ContactSerilizer,ProductSerilizer,SingleProductSerilizer,CategoryWiseSerializer,OrderSerilizer,OrderUpdateSerilizer,OrderJsonSerilizer,CartDataSerilizer,CartCreateSerilizer,SessionSerializer,setSessionTokenSerilizer,OrderDetalisSerilizer
 from .models import NewContact,Product,OrderUpdate,Order,CartUserData,ExcelFile
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -148,6 +148,20 @@ class GetCartView(APIView):
         except Exception as e:
             return Response({'error':'error'})
         
+class OrderDetails(APIView):
+    renderer_classes=[UserRenderer]
+    permission_classes=[IsAuthenticated]
+        
+    def post(self,request,*args,**kwargs):
+        email = request.data.get('email')
+        print(email)    
+        obj = Order.objects.filter(user__email=email)
+        print(obj)
+        serilizer =  OrderDetalisSerilizer(obj,many=True)
+        return Response(serilizer.data)
+
+
+
 
 
 def export_data_to_excel(request):
@@ -226,7 +240,7 @@ def import_exce_in_folder(request):
         workbook.save(buffer)
         buffer.seek(0)
         response = HttpResponse(buffer.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'  
 
         return response
     return render(request, 'your_template.html')
@@ -264,6 +278,8 @@ class contact_pdf(APIView):
             return Response({'status':400})
         
         return Response({'status':200,'path':f'/media/{filename}.pdf'})
+
+
 
 
 
@@ -398,6 +414,7 @@ class deleteTokenSession(APIView):
             del request.session['token']
             return Response({'message': 'Session data deleted successfully'})
         return Response({'message': 'Session data not found'}, status=status.HTTP_404_NOT_FOUND)
+
 
 
 
