@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from customauth.renderers import UserRenderer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .serilizer import ContactSerilizer,ProductSerilizer,SingleProductSerilizer,CategoryWiseSerializer,OrderSerilizer,OrderUpdateSerilizer,OrderJsonSerilizer,CartDataSerilizer,CartCreateSerilizer,SessionSerializer,setSessionTokenSerilizer,OrderDetalisSerilizer
+from .serilizer import ContactSerilizer,ProductSerilizer,SingleProductSerilizer,CategoryWiseSerializer,OrderSerilizer,OrderUpdateSerilizer,OrderJsonSerilizer,CartDataSerilizer,CartCreateSerilizer,SessionSerializer,setSessionTokenSerilizer,OrderDetalisSerilizer,SearchSerilizer
 from .models import NewContact,Product,OrderUpdate,Order,CartUserData,ExcelFile
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -163,6 +163,24 @@ class OrderDetails(APIView):
 
 
 
+class SearchItems(APIView):
+    renderer_classes =[UserRenderer]
+    def post(self,request,*args,**kwargs):
+        query = request.data.get('search')
+        pro = Product.objects.filter(product_name__icontains=query) | Product.objects.filter(category__icontains=query)
+        print(pro)
+        serilizer = SearchSerilizer(pro,many=True)
+        return Response(serilizer.data)
+    
+
+
+
+
+
+
+
+
+# ...............................................................................................................................
 
 def export_data_to_excel(request):
     objs = NewContact.objects.all()

@@ -28,5 +28,6 @@ urlpatterns = [
     path('gettokensession/',views.getTokensession.as_view()),
     path('deltokensession/',views.deleteTokenSession.as_view()),
     path('orderDetail/',views.OrderDetails.as_view()),
+    path('searchItem/',views.SearchItems.as_view()),
 ]
     

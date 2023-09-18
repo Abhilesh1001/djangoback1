@@ -71,3 +71,10 @@ class OrderDetalisSerilizer(serializers.ModelSerializer):
     class Meta:
         model= Order
         fields = ['order_id','email']
+
+
+class SearchSerilizer(serializers.ModelSerializer):
+    class Meta:
+        model =Product
+        fields = '__all__'
+
