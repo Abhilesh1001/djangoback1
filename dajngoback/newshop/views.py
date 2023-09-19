@@ -170,14 +170,7 @@ class SearchItems(APIView):
         pro = Product.objects.filter(product_name__icontains=query) | Product.objects.filter(category__icontains=query)
         print(pro)
         serilizer = SearchSerilizer(pro,many=True)
-        return Response(serilizer.data)
-    
-
-
-
-
-
-
+        return Response(serilizer.data) 
 
 
 # ...............................................................................................................................
