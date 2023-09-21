@@ -8,7 +8,7 @@ class BlogCommentSerlilizer(serializers.ModelSerializer):
         fields = ['sno','comment','user','product','time']
 
     
-
+ 
 class BlogReplySerilizer(serializers.ModelSerializer):
     class Meta:
         model = KartComment

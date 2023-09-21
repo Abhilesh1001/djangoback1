@@ -46,10 +46,9 @@ class BlogCommentView(APIView):
         
         repDict ={}
         for reply in replies:
-            # print(reply.parent.sno)
-            
             if reply.parent.sno not in repDict.keys():
                 formatted_time = reply.time.strftime('%d %m %Y %H:%M')
+                print(reply.sno)
                 comment_dict = {
                 'sno': reply.sno,
                 'comment': reply.comment,
@@ -58,9 +57,16 @@ class BlogCommentView(APIView):
                 }
                 repDict[reply.parent.sno]=[comment_dict]
             else:
-                repDict[reply.parent.sno].append(comment_dict)
+                formatted_time = reply.time.strftime('%d %m %Y %H:%M')  # Move this line here
+                comment_dict = {
+                'sno': reply.sno,
+                'comment': reply.comment,
+                'user': reply.user.name,  # Fetch the user's name
+                'time':formatted_time,
+                }
+                repDict[reply.parent.sno].append(comment_dict) 
         
-        print('rep',repDict)
+        # print('rep',repDict)
         cart_comment = []
         for comment_info in obj:
             formatted_time = comment_info.time.strftime('%d %m %Y %H:%M')
@@ -74,9 +80,9 @@ class BlogCommentView(APIView):
             cart_comment.append(comment_dict)
         cart=   {
             "cart_comment" :cart_comment,
-            "reply_comment" : repDict
+            "reply_comment" : [repDict]
         }
-        print('cart',cart)
+        # print('cart',cart)
 
-        return Response(cart_comment)
+        return Response(cart)
 
