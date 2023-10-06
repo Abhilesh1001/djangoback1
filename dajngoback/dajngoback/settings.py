@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-shp^o#++23fv=ibq6kfo4w@8@!f0trqa__m6^aw^qmvsh)@pzr
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.vercel.app','.now.sh']
 
 
 # Application definition
@@ -196,3 +196,11 @@ MEDIA_URL = '/media/'
 SESSION_COOKIE_SECURE = True  # Set to True if using HTTPS
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = 'Lax'
+
+STATICFILES_DIR = os.path.join(BASE_DIR,'static'),
+STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles_build','static')
+
+
+
+
+
