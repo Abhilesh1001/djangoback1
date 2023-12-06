@@ -42,18 +42,21 @@ class BlogCommentView(APIView):
     def get(self,request,pk=None,format=None):
         obj=KartComment.objects.filter(product__product_id=pk,parent__isnull=True)
         replies=KartComment.objects.filter(product__product_id=pk).exclude(parent=None)
+        
 
         
         repDict ={}
         for reply in replies:
+
             if reply.parent.sno not in repDict.keys():
                 formatted_time = reply.time.strftime('%d %m %Y %H:%M')
-                print(reply.sno)
+                print(reply.user.id)
                 comment_dict = {
                 'sno': reply.sno,
                 'comment': reply.comment,
                 'user': reply.user.name,  # Fetch the user's name
                 'time':formatted_time,
+                'userId': reply.user.id
                 }
                 repDict[reply.parent.sno]=[comment_dict]
             else:
@@ -63,6 +66,7 @@ class BlogCommentView(APIView):
                 'comment': reply.comment,
                 'user': reply.user.name,  # Fetch the user's name
                 'time':formatted_time,
+                'userId': reply.user.id
                 }
                 repDict[reply.parent.sno].append(comment_dict) 
         
@@ -76,6 +80,7 @@ class BlogCommentView(APIView):
                 'comment': comment_info.comment,
                 'user': comment_info.user.name,  # Fetch the user's name
                 'time':formatted_time,
+                'userId': comment_info.user.id
             }
             cart_comment.append(comment_dict)
         cart=   {

@@ -3,6 +3,25 @@ from customauth.models import User
 from django.utils.encoding import smart_str, force_bytes,DjangoUnicodeDecodeError
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.http import urlsafe_base64_decode,urlsafe_base64_encode
+from . models import ProfileUpdate
+
+
+from django.core.mail import send_mail
+from django.conf import settings
+
+
+
+# new Added 
+def send_email_to(link,user):
+    subject = "This email is for django PasswordReset from AbhleshCart"
+    message = link
+    from_email = settings.EMAIL_HOST_USER
+    receipent_list = [user]
+    send_mail(subject,message,from_email,receipent_list)
+
+
+
+
 
 class UserRegestrationSerilizer(serializers.ModelSerializer):
     password2 = serializers.CharField(style={'input_type':'password'},write_only=True)
@@ -13,7 +32,7 @@ class UserRegestrationSerilizer(serializers.ModelSerializer):
             'password':{'write_only':True}
         }
     def validate(self,attrs):
-        password = attrs.get('password')
+        password = attrs.get('password')    
         password2 = attrs.get('password2')
         # print(password,password2)
         if(password !=password2):
@@ -66,8 +85,10 @@ class SendPasswordResetEmailSerilizer(serializers.Serializer):
             user = User.objects.get(email=email)
             uid = urlsafe_base64_encode(force_bytes(user.id))
             token =PasswordResetTokenGenerator().make_token(user)
-            link = 'http://127.0.0.1:5173/auth/resetpassworduidtoken/'+uid+'/'+token
+            link = 'https://reactfront-gamma.vercel.app/#/resetpassworduidtoken/'+uid+'/'+token
             print('password Reset link',link)
+            # new Added 
+            send_email_to(link,user)
             return attrs
         else:
             raise serializers.ValidationError('You are not a Register User')
@@ -101,3 +122,18 @@ class UserPasswordResetPasswordreset(serializers.Serializer):
             PasswordResetTokenGenerator().check_token(user,token)
             raise serializers.ValidationError('Token is not valid or Expired') 
 
+class UserProfileSErilizer(serializers.ModelField):
+    class Meta:
+        model = ProfileUpdate
+        fielda = '__all__'
+
+
+class ProfileUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProfileUpdate
+        fields = '__all__' 
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProfileUpdate
+        fields = ['user', 'Date_of_Birth', 'profile_picture']

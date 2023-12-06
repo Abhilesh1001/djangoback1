@@ -78,3 +78,6 @@ class SearchSerilizer(serializers.ModelSerializer):
         model =Product
         fields = '__all__'
 
+
+        
+

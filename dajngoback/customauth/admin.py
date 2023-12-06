@@ -1,10 +1,8 @@
 from django.contrib import admin
-from .models import User
+from .models import User,ProfileUpdate
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 # Register your models here.
-
-
 
 class UserAdmin(BaseUserAdmin):
     list_display = ["id","email", "name","tc", "is_admin"]
@@ -30,3 +28,7 @@ class UserAdmin(BaseUserAdmin):
 
 # Now register the new UserAdmin...
 admin.site.register(User, UserAdmin)
+
+@admin.register(ProfileUpdate)
+class AdminProfileUpdata(admin.ModelAdmin):
+    list_display = ['user','Date_of_Birth','profile_picture']

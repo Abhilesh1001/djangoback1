@@ -10,11 +10,11 @@ class AdminNewContact(admin.ModelAdmin):
 
 @admin.register(Product)
 class AdminProduct(admin.ModelAdmin):
-    list_display=['product_id','product_name','category','desc','price','image']
+    list_display=['product_id','product_name','category','desc','price','image','qty','uom']
 
 @admin.register(Order)
 class AdminOrder(admin.ModelAdmin):
-    list_display=['order_id','items_json','name','email','date','address1','user']
+    list_display=['order_id','items_json','name','email','date','address1','user','payment_id','amount','order_pay_id','signature']
     
 @admin.register(OrderUpdate)
 class AdminOrderUpdate(admin.ModelAdmin):

@@ -27,6 +27,8 @@ class Product(models.Model):
     image = models.ImageField(upload_to='shop/media')
     desc = models.CharField(max_length=300)
     pub_data = models.DateField()
+    qty = models.IntegerField(default=0)
+    uom = models.CharField(max_length=50,default='')
 
 
 class Order(models.Model):
@@ -43,6 +45,10 @@ class Order(models.Model):
     state = models.CharField(max_length=50,default='')
     zip = models.CharField(max_length=50,default='')
     date = models.DateTimeField(default=now)
+    payment_id = models.CharField(max_length=100,verbose_name="Payment Id",default='')
+    order_pay_id = models.CharField(max_length=100,verbose_name="Order Id",default='')
+    signature = models.CharField(max_length=200,verbose_name="Signature",default='')
+
 
 class OrderUpdate(models.Model):
     update_id = models.AutoField(primary_key=True)
@@ -60,3 +66,4 @@ class CartUserData(models.Model):
 
 class ExcelFile(models.Model):
     file = models.FileField(upload_to="excel")
+

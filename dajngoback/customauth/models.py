@@ -75,4 +75,11 @@ class User(AbstractBaseUser):
         return self.is_admin
     
 
+
+class ProfileUpdate(models.Model):
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    Date_of_Birth = models.CharField(max_length=50)
+    profile_picture = models.ImageField(upload_to='shop/media')
+
+
     
